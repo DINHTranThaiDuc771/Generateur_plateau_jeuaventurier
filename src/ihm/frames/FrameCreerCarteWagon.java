@@ -218,7 +218,7 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
                     img = ImageIO.read(new File(filePath));
                     if ( img.getWidth() > 500 ||  img.getHeight() > 500 )
                     {
-                        Image image = img.getScaledInstance(this.dimEcran.getWidth(), this.dimEcran.getHeight(), Image.SCALE_DEFAULT);
+                        Image image = img.getScaledInstance((int)this.dimEcran.getWidth(),(int) this.dimEcran.getHeight(),(int) Image.SCALE_DEFAULT);
                         this.lblCarteWagon.setIcon(new ImageIcon(image));
                         this.panelVisualisationCarte.setSize(image.getWidth(fileChooser), image.getHeight(fileChooser));
                     }
