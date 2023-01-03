@@ -97,6 +97,9 @@ public class PGPanelParamJeu extends JPanel
         this.btnMoinsJetonsPourFinir  = new JButton();
         this.btnPlusJetonsParJoueur   = new JButton();
         this.btnPlusJetonsPourFinir   = new JButton();
+        this.frameCouleur             = null;
+        this.framePoint               = null;
+        this.frameCreerCarteWagon     = null;
 
         this.lblParamJeu.setText(" Parametre du jeu");
 

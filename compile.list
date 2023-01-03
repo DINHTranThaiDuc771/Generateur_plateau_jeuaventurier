@@ -22,7 +22,6 @@
 ./src/ihm/panels/PanelModifObjectif.java
 ./src/ihm/panels/PanelNoeud.java
 ./src/ihm/panels/PanelPlateau.java
-./src/ihm/panels/PanelVisualisationWagon.java
 
 ./src/ihm/panels/panelGenerateur/PGPanelAjouterElements.java
 ./src/ihm/panels/panelGenerateur/PGPanelExplorer.java

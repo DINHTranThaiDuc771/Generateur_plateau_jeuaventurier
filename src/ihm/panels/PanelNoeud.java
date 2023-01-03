@@ -6,9 +6,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import java.awt.BorderLayout;
 import controleur.Controleur;
@@ -18,6 +22,10 @@ import ihm.customComponent.TextFieldWithHint;
 public class PanelNoeud extends JPanel
 {
     private Controleur ctrl;
+    
+    private JPanel               panelListe;
+    private JPanel               panelInfos;
+    private JPanel               panelBoutons;
 
 	private JTextField           txtNom;
     private TextFieldOnlyInteger txtPosX;
@@ -26,67 +34,49 @@ public class PanelNoeud extends JPanel
     private TextFieldOnlyInteger txtPosNomY;
     private JButton              btnCouleur;
     private JButton              btnAjouter;
+    private JLabel               labelPos;
+    private JLabel               labelNom;
+    private JLabel               labelPosNom;
+    private JLabel               labelCouleur;
 
-    private Color      couleur;
+    private Color                couleur;
+    private Color                CouleurAncienTheme;
+
 
     public PanelNoeud(Controleur ctrl) 
     {
         this.ctrl = ctrl;
-        this.setBackground(new Color(68, 71, 90));
         this.setLayout(new BorderLayout());
 
         /*Panel liste villes */
-        JPanel panelListe = new JPanel();
-        panelListe.setBackground(new Color(68, 71, 90));        
+        this.panelListe = new JPanel();      
         
         /*Panel infos villes */
-        JPanel panelInfos = new JPanel();
-        panelInfos.setBackground(new Color(68, 71, 90));
+        this.panelInfos = new JPanel();
         
         GroupLayout layout = new GroupLayout(panelInfos);
         panelInfos.setLayout(layout);
 
-		this.txtNom = new TextFieldWithHint("Nouveau Noeud",ctrl);
-        this.txtNom.setBackground(new Color(58, 60, 76));
-		this.txtNom.setForeground(Color.WHITE);
-
-        this.txtPosX = new TextFieldOnlyInteger("X",this.ctrl);
-        this.txtPosX.setBackground(new Color(58, 60, 76));
-        this.txtPosX.setForeground(Color.GRAY);
-
-
-
-        this.txtPosY = new TextFieldOnlyInteger("Y",this.ctrl);
-        this.txtPosY.setBackground(new Color(58, 60, 76));
-        this.txtPosY.setForeground(Color.GRAY);
-
-        this.txtPosNomX = new TextFieldOnlyInteger("PosNomX",this.ctrl);
-        this.txtPosNomX.setBackground(new Color(58, 60, 76));
-        this.txtPosNomX.setForeground(Color.GRAY);
-
-
-
-        this.txtPosNomY = new TextFieldOnlyInteger("PosNomY",this.ctrl);
-        this.txtPosNomY.setBackground(new Color(58, 60, 76));
-        this.txtPosNomY.setForeground(Color.GRAY);
+		this.txtNom     = new TextFieldWithHint   ("Nouveau Noeud", this.ctrl);
+        this.txtPosX    = new TextFieldOnlyInteger("X"            , this.ctrl);
+        this.txtPosY    = new TextFieldOnlyInteger("Y"            , this.ctrl);
+        this.txtPosNomX = new TextFieldOnlyInteger("PosNomX"      , this.ctrl);
+        this.txtPosNomY = new TextFieldOnlyInteger("PosNomY"      , this.ctrl);
 
 
         this.btnCouleur = new JButton("Couleur");
-        this.btnCouleur.setBackground(null);
-        add(this.btnCouleur);
+        this.btnCouleur.setBackground(this.ctrl.getTheme().get("bottuns").get(1));
+        this.add(this.btnCouleur);
         this.btnCouleur.addActionListener(e -> {
             selectColor();
         });
 
-        JLabel labelPos, labelNom, labelPosNom, labelCouleur;
-        labelPos = new JLabel("Position");
-        labelPos.setForeground(Color.WHITE);
-        labelNom = new JLabel("Nom");
-        labelNom.setForeground(Color.WHITE);
-        labelPosNom = new JLabel("Position Nom");
-        labelPosNom.setForeground(Color.WHITE);
-        labelCouleur = new JLabel("Couleur");
-        labelCouleur.setForeground(Color.WHITE);
+        this.labelPos     = new JLabel("Position"    );
+        this.labelNom     = new JLabel("Nom"         );
+        this.labelPosNom  = new JLabel("Position Nom");
+        this.labelCouleur = new JLabel("Couleur"     );
+
+        this.CouleurAncienTheme = null;
 
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -94,49 +84,47 @@ public class PanelNoeud extends JPanel
         GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 
         hGroup.addGroup(layout.createParallelGroup().
-            addComponent(labelNom).addComponent(labelPos).addComponent(labelPosNom).addComponent(labelCouleur));
+            addComponent(this.labelNom).addComponent(this.labelPos).addComponent(this.labelPosNom).addComponent(this.labelCouleur));
 
         hGroup.addGroup(layout.createParallelGroup().
-            addComponent(txtNom).addComponent(txtPosX).addComponent(txtPosNomX).addComponent(btnCouleur));
+            addComponent(this.txtNom).addComponent(this.txtPosX).addComponent(this.txtPosNomX).addComponent(this.btnCouleur));
         
-        hGroup.addGroup(layout.createParallelGroup().addComponent(txtNom).
-            addComponent(txtPosY).addComponent(txtPosNomY));
+        hGroup.addGroup(layout.createParallelGroup().addComponent(this.txtNom).
+            addComponent(this.txtPosY).addComponent(this.txtPosNomY));
         layout.setHorizontalGroup(hGroup);
 
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
         
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-            addComponent(labelNom).addComponent(txtNom));
+            addComponent(this.labelNom).addComponent(this.txtNom));
 
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-            addComponent(labelPos).addComponent(txtPosX).addComponent(txtPosY));
+            addComponent(this.labelPos).addComponent(this.txtPosX).addComponent(this.txtPosY));
 
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-            addComponent(labelPosNom).addComponent(txtPosNomX).addComponent(txtPosNomY));
+            addComponent(this.labelPosNom).addComponent(this.txtPosNomX).addComponent(this.txtPosNomY));
         
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-            addComponent(labelCouleur).addComponent(btnCouleur));
+            addComponent(this.labelCouleur).addComponent(this.btnCouleur));
         
         layout.setVerticalGroup(vGroup);
 
         /*Panel boutons */
-        JPanel panelBoutons = new JPanel();
-        panelBoutons.setBackground(new Color(68, 71, 90));
+        this.panelBoutons = new JPanel();
         
         this.btnAjouter = new JButton("Ajouter");
-        this.btnAjouter.setBackground(new Color(58, 60, 76));
-        this.btnAjouter.setForeground(Color.WHITE);
         this.btnAjouter.addActionListener(e -> {
             ajouterNoeud();
         });
 
-
         panelBoutons.add(this.btnAjouter);
 
         /*Ajout des panels*/
-        this.add(panelListe, BorderLayout.WEST);
-        this.add(panelInfos, BorderLayout.CENTER);
-        this.add(panelBoutons, BorderLayout.SOUTH);
+        this.add(panelListe  , BorderLayout.WEST  );
+        this.add(panelInfos  , BorderLayout.CENTER);
+        this.add(panelBoutons, BorderLayout.SOUTH );
+
+        this.appliquerTheme();
     }
 
     /**
@@ -144,12 +132,11 @@ public class PanelNoeud extends JPanel
      */
     private void effacerForm()
     {
-        this.txtNom.setText("");
-        this.txtPosX.setText("");
-        this.txtPosY.setText("");
+        this.txtNom    .setText("");
+        this.txtPosX   .setText("");
+        this.txtPosY   .setText("");
         this.txtPosNomX.setText("");
         this.txtPosNomY.setText("");
-        this.btnCouleur.setBackground(null);
     }
 
     /**
@@ -174,18 +161,15 @@ public class PanelNoeud extends JPanel
 		else
 		{
 			nom = this.txtNom.getText();
-			this.txtNom.setBackground(new Color(58, 60, 76));
 		}
     
 		// test position X
 		try 
 		{
 			posX = Integer.parseInt(this.txtPosX.getText());
-			this.txtPosX.setBackground(new Color(58, 60, 76));
 		} 
 		catch (NumberFormatException e) 
 		{
-			this.txtPosX.setBackground(Color.RED);
 			JOptionPane.showMessageDialog(this, "Veuillez entrer une position X valide", "Erreur", JOptionPane.ERROR_MESSAGE);
 			erreur = true;
 		}
@@ -194,7 +178,6 @@ public class PanelNoeud extends JPanel
 		try
 		{
 			posY = Integer.parseInt(this.txtPosY.getText());
-			this.txtPosY.setBackground(new Color(58, 60, 76));
 		}
 		catch (NumberFormatException e)
 		{
@@ -207,7 +190,6 @@ public class PanelNoeud extends JPanel
 		try
 		{
 			posNomX = Integer.parseInt(this.txtPosNomX.getText());
-			this.txtPosNomX.setBackground(new Color(58, 60, 76));
 		}
 		catch (NumberFormatException e)
 		{
@@ -220,7 +202,6 @@ public class PanelNoeud extends JPanel
 		try
 		{
 			posNomY = Integer.parseInt(this.txtPosNomY.getText());
-			this.txtPosNomY.setBackground(new Color(58, 60, 76));
 		}
 		catch (NumberFormatException e)
 		{
@@ -248,5 +229,80 @@ public class PanelNoeud extends JPanel
     {
         this.couleur = JColorChooser.showDialog(this, "Choisir une couleur", Color.BLACK);
         this.btnCouleur.setBackground(couleur);
+    }
+
+    public void appliquerTheme()
+    {
+        HashMap<String, List<Color>> theme = this.ctrl.getTheme();
+
+		Color background       = theme.get("background").get(0);
+        Color labelForeColor   = theme.get("labels"    ).get(0);
+		Color saisiBackColor   = theme.get("saisies"   ).get(1);
+        Color placeholderColor = theme.get("saisies"   ).get(2);
+        Color btnForeColor     = theme.get("bottuns"   ).get(0);
+		Color btnBackColor     = theme.get("bottuns"   ).get(1);
+
+
+        this.setBackground(background);
+        this.setForeground(labelForeColor);
+
+        this.panelListe  .setForeground(labelForeColor);
+        this.panelListe  .setBackground(background);
+
+        this.panelInfos  .setForeground(labelForeColor);
+        this.panelInfos  .setBackground(background);
+
+        this.panelBoutons.setForeground(labelForeColor);
+        this.panelBoutons.setBackground(background);
+
+        this.txtNom      .setBorder(null);
+        this.txtNom      .setForeground(placeholderColor);
+        this.txtNom      .setBackground(saisiBackColor);
+        this.txtNom      .setDisabledTextColor(new Color(255, 0, 0));
+
+        this.txtPosX     .setBorder(null);
+        this.txtPosX     .setForeground(placeholderColor);
+        this.txtPosX     .setBackground(saisiBackColor);
+        this.txtPosX     .setDisabledTextColor(new Color(255, 0, 0));
+
+        this.txtPosY     .setBorder(null);
+        this.txtPosY     .setForeground(placeholderColor);
+        this.txtPosY     .setBackground(saisiBackColor);
+        this.txtPosY     .setDisabledTextColor(new Color(255, 0, 0));
+
+        this.txtPosNomX  .setBorder(null);
+        this.txtPosNomX  .setForeground(placeholderColor);
+        this.txtPosNomX  .setBackground(saisiBackColor);
+        this.txtPosNomX  .setDisabledTextColor(new Color(255, 0, 0));
+
+        this.txtPosNomY  .setBorder(null);
+        this.txtPosNomY  .setForeground(placeholderColor);
+        this.txtPosNomY  .setBackground(saisiBackColor);
+        this.txtPosNomY  .setDisabledTextColor(new Color(255, 0, 0));
+
+        this.btnCouleur  .setForeground(btnForeColor);
+        this.btnCouleur  .setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        if (this.btnCouleur.getBackground().equals(this.CouleurAncienTheme))
+        {
+            this.btnCouleur.setBackground(btnBackColor);
+        }
+
+        this.btnAjouter  .setForeground(btnForeColor);
+        this.btnAjouter  .setBackground(btnBackColor);
+        this.btnAjouter  .setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+
+        this.labelPos    .setOpaque(false);
+        this.labelPos    .setForeground(labelForeColor);
+
+        this.labelNom    .setOpaque(false);
+        this.labelNom    .setForeground(labelForeColor);
+
+        this.labelPosNom .setOpaque(false);
+        this.labelPosNom .setForeground(labelForeColor);
+
+        this.labelCouleur.setOpaque(false);
+        this.labelCouleur.setForeground(labelForeColor);
+
+        this.CouleurAncienTheme = btnBackColor;
     }
 }

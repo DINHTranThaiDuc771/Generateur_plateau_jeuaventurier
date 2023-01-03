@@ -25,9 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controleur.Controleur;
-import ihm.panels.PanelVisualisationWagon;
-
-
 
 public class FrameCreerCarteWagon extends JFrame implements ActionListener
 {
@@ -36,7 +33,7 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
 
     private JPanel panelParametrageCarte;
     private JPanel panelVisualisationCarte;
-    private PanelVisualisationWagon panelVisualisation;
+    private JPanel panelVisualisation;
     private JPanel panelActionCarte;
 
     private List lstCarte;
@@ -71,7 +68,7 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
         this.panelParametrageCarte = new JPanel();
         this.panelParametrageCarte.setLayout(new GridLayout(5,1));
 
-        this.panelVisualisation = new PanelVisualisationWagon();
+        this.panelVisualisation = new JPanel();
 
         this.panelVisualisationCarte = new JPanel();
         this.lblCarteWagon = new JLabel("");
@@ -218,7 +215,7 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
                     img = ImageIO.read(new File(filePath));
                     if ( img.getWidth() > 500 ||  img.getHeight() > 500 )
                     {
-                        Image image = img.getScaledInstance((int)this.dimEcran.getWidth(),(int) this.dimEcran.getHeight(),(int) Image.SCALE_DEFAULT);
+                        Image image = img.getScaledInstance((int) this.dimEcran.getWidth()* 8/10, (int)this.dimEcran.getHeight()* 8/10, Image.SCALE_DEFAULT);
                         this.lblCarteWagon.setIcon(new ImageIcon(image));
                         this.panelVisualisationCarte.setSize(image.getWidth(fileChooser), image.getHeight(fileChooser));
                     }
