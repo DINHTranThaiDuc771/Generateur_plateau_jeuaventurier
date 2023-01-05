@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import ihm.frames.FramePlateau;
 import metier.Arete;
 import metier.Metier;
@@ -28,7 +30,17 @@ public class Controleur
 	// Methodes
     public void nouveau() 
     {
-        this.metier = new Metier(this);
+		this.metier = new Metier(this);
+			
+		if (this.ihm != null)
+			this.ihm.dispose();
+
+		this.ihm = new FramePlateau(this);
+	}
+
+	public void ouvrir() 
+	{
+		this.metier = new Metier(this);
         
         if (this.ihm != null)
             this.ihm.dispose();
@@ -51,11 +63,15 @@ public class Controleur
 	public void genererTxt(String type, String nomFichier)
 	{
 		this.ihm.dispose();
+		this.metier.ecrireFichier(nomFichier);
+	}
+
+	public void ecrireFichier(String nomFichier)
+	{
+		this.metier.ecrireFichier(nomFichier);
 	}
 
 	/* Getters */
-	public Metier getMetier() { return this.metier; } // à enlever
-
 	public int[]         getTaillePlateau () { return this.metier.getTaillePlateau (); }
 	public BufferedImage getImagePlateau  () { return this.metier.getImagePlateau  (); }
 	public Color         getCouleurPlateau() { return this.metier.getCouleurPlateau(); }
@@ -96,8 +112,14 @@ public class Controleur
 	public void setNbJetonFin       (int val) { this.metier.setNbJetonFin       (val); }
 
 	public void setImageVersoCouleur   (BufferedImage img) { this.metier.setImageVersoCouleur   (img); }
+	public void supprimerImageVersoCouleur() { this.metier.supprimerImageVersoCouleur(); }
+
 	public void setImageRectoLocomotive(BufferedImage img) { this.metier.setImageRectoLocomotive(img); }
+	public void supprimerImageRectoLocomotive(){ this.metier.supprimerImageRectoLocomotive(); }
+
 	public void setImageRectoCouleur(int ind, BufferedImage img) { this.metier.setImageRectoCouleur(ind, img); }
+	public void supprimerImageRectoCouleur(int indice){ this.metier.supprimerImageRectoCouleur(indice); }
+
 	public void setImageVersoObjectif  (BufferedImage img) { this.metier.setImageVersoObjectif  (img); }
 
 	public void setPositionNoeud(int id, int x, int y)
@@ -162,19 +184,21 @@ public class Controleur
 	 * @param nom2 : Nom du second noeud
 	 * @param point : Nombre de points
 	 */
-	public void ajouterObjectif(String nom1, String nom2, int point, BufferedImage recto, BufferedImage verso) 
+	public void ajouterObjectif(String nom1, String nom2, int point, BufferedImage recto) 
 	{
-		this.metier.ajouterObjectif(nom1, nom2, point, recto, verso);
+		this.metier.ajouterObjectif(nom1, nom2, point, recto);
+		this.ihm.majListes();
+		this.ihm.selectObjectif(this.metier.getCarteObjectif().size()-1);
 	}
 
 	/**
 	 * Supprimer un objectif
-	 * @param string : Nom du premier noeud
-	 * @param string2 : Nom du second noeud
+	 * @param co : Carte Objectif à supprimer
 	 */
-    public void supprimerObjectif(String string, String string2) 
+    public void supprimerObjectif(CarteObjectif co) 
 	{
-		this.metier.supprimerObjectif(string, string2);
+		this.metier.supprimerObjectif(co);
+		this.ihm.majListes();
     }
 
 	/**
@@ -206,10 +230,13 @@ public class Controleur
 	 * Supprimer un noeud
 	 * @param nom : Nom du noeud
 	 */
-    public void supprimerNoeud(int index) 
+    public boolean supprimerNoeud(int index) 
 	{
-		this.metier.supprimerNoeud(index);
-		this.ihm.majIHM();
+		boolean res = this.metier.supprimerNoeud(index);
+	
+		if (res) this.ihm.majIHM();
+		
+		return res;
     }
 
 	/**

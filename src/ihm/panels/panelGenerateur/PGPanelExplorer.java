@@ -29,7 +29,7 @@ public class PGPanelExplorer extends javax.swing.JPanel
 
         this.jTabbedPane1.setName("");
         this.jTabbedPane1.addTab("Noeud"    , this.pGPanelListN);
-        this.jTabbedPane1.addTab("Arrêtes"  , this.pGPanelListA);
+        this.jTabbedPane1.addTab("Arêtes"   , this.pGPanelListA);
         this.jTabbedPane1.addTab("Objectifs", this.pGPanelListO);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -54,6 +54,9 @@ public class PGPanelExplorer extends javax.swing.JPanel
     {
         this.setBackground(this.ctrl.getTheme().get("background").get(0));
 
+        this.jTabbedPane1.setForeground(this.ctrl.getTheme().get("titles").get(0));
+        this.jTabbedPane1.setBackground(this.ctrl.getTheme().get("titles").get(1));
+
         this.pGPanelListA.appliquerTheme();
         this.pGPanelListN.appliquerTheme();
         this.pGPanelListO.appliquerTheme();
@@ -63,7 +66,7 @@ public class PGPanelExplorer extends javax.swing.JPanel
 	{
 		this.pGPanelListA.majIHM();
 		this.pGPanelListN.majIHM();
-		//this.pGPanelListO.majListes();
+		this.pGPanelListO.majIHM();
 	}
 
 	public void selectNoeud(int index)
@@ -77,6 +80,12 @@ public class PGPanelExplorer extends javax.swing.JPanel
 		this.jTabbedPane1.setSelectedIndex(1);
 		this.pGPanelListA.selectArete(index);
 	}
+
+    public void selectObjectif(int index)
+    {
+        this.jTabbedPane1.setSelectedIndex(2);
+        this.pGPanelListO.selectObjectif(index);
+    }
 
 	public void envoyerCouleur(Color c, String nomPanel)
 	{

@@ -137,6 +137,7 @@ public class PanelNoeud extends JPanel
         this.txtPosY   .setText("");
         this.txtPosNomX.setText("");
         this.txtPosNomY.setText("");
+        this.btnCouleur.setBackground(this.ctrl.getTheme().get("bottuns").get(0));
     }
 
     /**

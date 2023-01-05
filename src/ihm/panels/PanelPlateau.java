@@ -33,6 +33,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontMetrics;
 
 
 public class PanelPlateau extends JPanel implements MouseWheelListener, MouseListener, MouseMotionListener
@@ -203,7 +204,7 @@ public class PanelPlateau extends JPanel implements MouseWheelListener, MouseLis
 
 		// affichage de l'image de fond
 		BufferedImage img = this.ctrl.getImagePlateau();
-		if (img != null)
+		if (img != null && taillePlateau[0] > 0 && taillePlateau[1] > 0)
 		{
 			// on redimensionne l'image de fond pour qu'elle corresponde à la taille du plateau
 			BufferedImage imgPlateau = new BufferedImage(taillePlateau[0], taillePlateau[1], img.getType());
@@ -257,11 +258,14 @@ public class PanelPlateau extends JPanel implements MouseWheelListener, MouseLis
 			int midY = noeud.getY();
 
 			// contour du noeud
-            if (noeud == selectionNoeud)
-                g2.setColor(Color.RED);
-            else
-			    g2.setColor(Color.BLACK);
+			g2.setColor(Color.BLACK);
 			g2.fillOval(midX-12, midY-12, 24, 24);
+
+            if (noeud == selectionNoeud)
+            {
+                g2.setColor(Color.RED);
+                g2.drawOval(midX-14, midY-14, 28, 28);
+            }
 
 			// noeud
             g2.setColor(noeud.getCouleur());
@@ -270,18 +274,19 @@ public class PanelPlateau extends JPanel implements MouseWheelListener, MouseLis
 			this.tabNoeud[i] = new Ellipse2D.Double(midX-12, midY-12, 24, 24);
 
 			// contour du nom du noeud
+			FontMetrics metrics = g.getFontMetrics();
+			int width = metrics.stringWidth(noeud.getNom());
+
 			g2.setColor(Color.WHITE);
 			g2.fillRect(midX + noeud.getXNom() - (noeud.getNom().length() * 3), 
 			            midY + noeud.getYNom() - 7, 
-			            noeud.getNom().length() * 6, 
-						14);
+			            width, 14);
 
 			this.tabNomNoeud[i++] = new Rectangle2D.Double(midX + noeud.getXNom() - (noeud.getNom().length() * 3), 
 			                                               midY + noeud.getYNom() - 7, 
-			                                               noeud.getNom().length() * 6, 
-			                                               14);
+			                                               width, 14);
 
-			// nom du noeud
+			// nom du noeud	
 			g2.setColor(Color.BLACK);
             g2.drawString(noeud.getNom(), 
 			              midX + noeud.getXNom() - (noeud.getNom().length() * 3), 
@@ -454,7 +459,7 @@ public class PanelPlateau extends JPanel implements MouseWheelListener, MouseLis
                         int x, y;
                         x = (int) event.getLocation().getX();
                         y = (int) event.getLocation().getY();  
-						PanelPlateau.this.ctrl.ajouterNoeud("Noeud Nouveau", x, y, 0, -20, Color.BLACK);            
+						PanelPlateau.this.ctrl.ajouterNoeud("", x, y, 0, -20, Color.BLACK);            
                         p.revalidate();
                         p.repaint();
                         event.dropComplete(true);

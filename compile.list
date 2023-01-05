@@ -7,7 +7,6 @@
 ./src/ihm/frames/FrameCouleur.java
 ./src/ihm/frames/FrameCouleurChooser.java
 ./src/ihm/frames/FrameCreerCarteWagon.java
-./src/ihm/frames/FrameModif.java
 ./src/ihm/frames/FrameObjectif.java
 ./src/ihm/frames/FramePlateau.java
 ./src/ihm/frames/FramePoint.java
@@ -17,9 +16,7 @@
 ./src/ihm/panels/PanelAjoutObjectif.java
 ./src/ihm/panels/PanelArete.java
 ./src/ihm/panels/PanelGenerateur.java
-./src/ihm/panels/PanelGererObjectif.java
 ./src/ihm/panels/PanelJoueur.java
-./src/ihm/panels/PanelModifObjectif.java
 ./src/ihm/panels/PanelNoeud.java
 ./src/ihm/panels/PanelPlateau.java
 

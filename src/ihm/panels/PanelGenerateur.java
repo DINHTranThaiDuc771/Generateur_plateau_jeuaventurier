@@ -77,6 +77,11 @@ public class PanelGenerateur extends JPanel
 	{
 		this.pGPanelExplorer.selectArete(index);
 	}
+	
+	public void selectObjectif(int index)
+	{
+		this.pGPanelExplorer.selectObjectif(index);
+	}
 
 	public void envoyerCouleur(Color c, String nomPanel)
 	{

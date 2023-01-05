@@ -26,6 +26,16 @@ public class Arete
 	public Color getCouleur1() { return this.couleur1; }
 	public Color getCouleur2() { return this.couleur2; }
 
+	public void setNoeud1(Noeud n) 
+	{ 
+		this.noeud1 = n; 
+	}
+
+	public void setNoeud2(Noeud n) 
+	{ 
+		this.noeud2 = n; 
+	}
+
 	public void setdistance(int distance) 
 	{ 
 		this.distance = distance; 

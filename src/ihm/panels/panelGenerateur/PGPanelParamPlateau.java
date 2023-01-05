@@ -1,7 +1,9 @@
 package ihm.panels.panelGenerateur;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,11 +19,12 @@ import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 
 import controleur.Controleur;
 import ihm.customComponent.TextFieldWithHint;
@@ -60,7 +63,7 @@ public class PGPanelParamPlateau extends JPanel
 
 
         /* Titre (Parametre du Plateau) */
-        this.lblParamPlateau.setText      (" Parametre du Plateau");
+        this.lblParamPlateau.setText      (" Parametre du plateau");
 
         /* Dimension */
         this.lblDimension.setText      ("Dimension");
@@ -117,10 +120,21 @@ public class PGPanelParamPlateau extends JPanel
         });
 
         /* Liste de choix de la police */
-		this.ddlstChoisirFont.setModel(new DefaultComboBoxModel<String>(new String[] 
-			{ "Arial", "Calibri", "Comic Sans MS", "Courier New", "Georgia", "Impact", 
-			"Lucida Console", "Lucida Sans Unicode", "Tahoma", "Times New Roman", 
-			"Trebuchet MS", "Verdana" }));
+		String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		this.ddlstChoisirFont = new JComboBox<String>(fonts);
+		this.ddlstChoisirFont.setSelectedItem("Arial");
+
+		this.ddlstChoisirFont.setRenderer(new DefaultListCellRenderer() 
+		{
+			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) 
+			{
+				JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				String fontName = (String) value;
+				label.setFont(new Font(fontName, Font.PLAIN, 12));
+				return label;
+			}
+		});
+		
 		this.ddlstChoisirFont.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -258,6 +272,13 @@ public class PGPanelParamPlateau extends JPanel
 				{
 					BufferedImage img = ImageIO.read(fichier);
 					this.ctrl.setImagePlateau(img);
+
+					int choix = JOptionPane.showConfirmDialog(null, "Voulez-vous donner au plateau les dimensions de votre image ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+					if (choix == JOptionPane.YES_OPTION)
+					{
+						this.ctrl.setTaillePlateauX(img.getWidth());
+						this.ctrl.setTaillePlateauY(img.getHeight());
+					}
 				}
 				else
 					JOptionPane.showMessageDialog(this, "Le fichier choisi doit-être au format JPG, GIF, PNG ou JPEG", "Erreur", JOptionPane.ERROR_MESSAGE);         
@@ -355,7 +376,7 @@ public class PGPanelParamPlateau extends JPanel
         this.btnChoisirCouleur.setBackground(btnBackColor);
         this.btnChoisirCouleur.setForeground(btnForeColor); 
 
-        /* Bouton de choix de la police */
+        /* combo box de choix de la police */
         this.ddlstChoisirFont.setOpaque    (true);
         this.ddlstChoisirFont.setBorder    (null);
         this.ddlstChoisirFont.setForeground(btnForeColor);

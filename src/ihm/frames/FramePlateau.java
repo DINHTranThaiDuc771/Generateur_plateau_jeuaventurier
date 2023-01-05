@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import controleur.Controleur;
@@ -99,7 +100,7 @@ public class FramePlateau extends JFrame
 		}
 
 		// Enregistrement du fichier
-		this.ctrl.getMetier().ecrireFichier(this.nomFichier);
+		this.ctrl.ecrireFichier(this.nomFichier);
 
 		// Récupération du nom du fichier
 		
@@ -143,10 +144,12 @@ public class FramePlateau extends JFrame
 	{
 		// Ouvrir le menu pour choisir un répertoire de sauvegarde
 		JFileChooser choose = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		choose.setFileFilter(new FileNameExtensionFilter("Création d'une image au format " + formatImage, formatImage));
 
 		String filePath = "";
 
 		int res = choose.showSaveDialog(null);
+		
 
 		if (res == JFileChooser.APPROVE_OPTION) 
 		{
@@ -213,6 +216,11 @@ public class FramePlateau extends JFrame
 	public void selectArete(int index)
 	{
 		this.panelGenerateur.selectArete(index);
+	}
+
+	public void selectObjectif(int index)
+	{
+		this.panelGenerateur.selectObjectif(index);
 	}
 
 	public void envoyerCouleur(Color c, String nomPanel)

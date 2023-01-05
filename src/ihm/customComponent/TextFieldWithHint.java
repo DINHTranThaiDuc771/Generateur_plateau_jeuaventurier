@@ -54,11 +54,21 @@ public class TextFieldWithHint extends JTextField implements FocusListener
             this.showingHint = true;
         }
     }
+
+    public void placeholderToTrueTxt()
+    {
+        this.showingHint = false;
+    }
   
     @Override
     public String getText()
     {
         return this.showingHint ? "" : super.getText();
+    }
+
+    public String getHint()
+    {
+        return this.hint;
     }
 
     /**

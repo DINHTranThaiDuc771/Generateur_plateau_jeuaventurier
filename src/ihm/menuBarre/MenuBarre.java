@@ -182,7 +182,12 @@ public class MenuBarre extends JMenuBar implements ActionListener
 		if (e.getSource() instanceof JMenuItem) 
 		{
 			if (e.getSource() == this.menuiFichierNouveau) 
-				this.ctrl.nouveau();
+			{
+				int choix = JOptionPane.showConfirmDialog(this.ctrl.getIHM(), "Les modification non enregistrées seront perdu, etes-vous sûr de votre choix ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+        
+				if (choix == JOptionPane.YES_OPTION)
+					this.ctrl.nouveau();
+			}
 
 			if (e.getSource() == this.menuiFichierOuvrir) 
 			{

@@ -15,34 +15,30 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import controleur.Controleur;
-import ihm.customComponent.TextFieldWithHint;
+import ihm.customComponent.TextFieldOnlyInteger;
 import metier.Noeud;
 
 public class PanelAjoutObjectif extends JPanel
 {
     private Controleur ctrl;
     
-    private JComboBox<String> cbA;
-    private JComboBox<String> cbB;
-    private TextFieldWithHint txtPoint;
-    private JButton           btnAjout;
+    private JComboBox<String>    cbA;
+    private JComboBox<String>    cbB;
+    private TextFieldOnlyInteger txtPoint;
+    private JButton              btnAjout;
 
-    private List<Noeud>         lstNoeudA;
-    private List<Noeud>         lstNoeudB;
+    private List<Noeud>          lstNoeudA;
+    private List<Noeud>          lstNoeudB;
 
-    private JButton             btnRecto;
-    private JButton             btnVerso;
+    private JButton              btnRecto;
 
-    private BufferedImage               imgRecto;
-    private BufferedImage               imgVerso;
+    private BufferedImage        imgRecto;
 
 
     public PanelAjoutObjectif(Controleur ctrl)
@@ -71,26 +67,12 @@ public class PanelAjoutObjectif extends JPanel
         lblVerso = new JLabel("Verso");
         lblVerso.setForeground(Color.WHITE);
        
-        this.txtPoint = new TextFieldWithHint("Point", ctrl);
+        this.txtPoint = new TextFieldOnlyInteger(ctrl);
         this.txtPoint.setBackground(new Color(58, 60, 76));
         this.txtPoint.setForeground(Color.GRAY);
 
-        this.txtPoint.addKeyListener(new KeyAdapter() 
-        {
-            public void keyPressed(KeyEvent ke) 
-            {
-               if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9' || ke.getKeyChar() == KeyEvent.VK_BACK_SPACE || ke.getKeyChar() == KeyEvent.VK_DELETE ) {
-                  txtPoint.setEditable(true);
-               }else
-               {
-                  txtPoint.setEditable(false);
-               }
-               
-            }
-        });
-
-        this.lstNoeudA = this.ctrl.getMetier().getNoeuds();
-        this.lstNoeudB = this.ctrl.getMetier().getNoeuds();
+        this.lstNoeudA = this.ctrl.getNoeuds();
+        this.lstNoeudB = this.ctrl.getNoeuds();
 
         String[] tabNoeudA = new String[lstNoeudA.size()];
         String[] tabNoeudB = new String[lstNoeudB.size()];
@@ -116,44 +98,32 @@ public class PanelAjoutObjectif extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                String path = "";
-                JFileChooser chooser = new JFileChooser("./donnees/images");
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, GIF, PNG", "jpg", "gif", "png", "jpeg");
-                chooser.setFileFilter(filter);
-                int returnVal = chooser.showOpenDialog(null);
-                if(returnVal == JFileChooser.APPROVE_OPTION) 
-                {
-                    File file = chooser.getSelectedFile();
-                    path = file.getAbsolutePath();
-                    try
-                    {
-                        imgRecto = ImageIO.read(new File(path));
-                    } catch (IOException e1) {e1.printStackTrace();}
-                }
-            }
-        });
+                JFileChooser fc = new JFileChooser();
+				fc.setFileFilter(new FileNameExtensionFilter("JPG & JPEG & GIF & PNG Images", "jpg", "gif", "png", "jpeg"));
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fc.setMultiSelectionEnabled(false);
 
-        /*Image Verso */
-        this.btnVerso = new JButton("image");
-        this.btnVerso.setBackground(new Color(58, 60, 76));
-        this.btnVerso.setForeground(Color.WHITE);
-        this.btnVerso.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                String path = "";
-                JFileChooser chooser = new JFileChooser("./donnees/images");
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, GIF, PNG", "jpg", "gif", "png");
-                chooser.setFileFilter(filter);
-                int returnVal = chooser.showOpenDialog(null);
-                if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = chooser.getSelectedFile();
-                    path = file.getAbsolutePath();
-                    try
-                    {
-                        imgVerso = ImageIO.read(new File(path));
-                    } catch (IOException e1) {e1.printStackTrace();}
-                }
+				int result = fc.showOpenDialog(ctrl.getIHM());
+				if (result == JFileChooser.APPROVE_OPTION  && fc.getSelectedFile().getPath() != null)
+				{
+					try
+					{
+						File fichier = fc.getSelectedFile();
+						String extention = fichier.getName().substring(fichier.getName().lastIndexOf('.') + 1);
+
+						if (extention.equals("jpg") || extention.equals("gif") || 
+							extention.equals("png") || extention.equals("jpeg")  )
+						{
+							imgRecto = ImageIO.read(fichier);
+						}
+						else
+							JOptionPane.showMessageDialog(ctrl.getIHM(), "Le fichier choisi doit-être au format JPG, GIF, PNG ou JPEG", "Erreur", JOptionPane.ERROR_MESSAGE);         
+					}
+					catch(IOException ex)
+					{
+						JOptionPane.showMessageDialog(ctrl.getIHM(), "Le fichier choisi n'est pas une image supportée", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+				}
             }
         });
 
@@ -163,10 +133,10 @@ public class PanelAjoutObjectif extends JPanel
         GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 
         hGroup.addGroup(layout.createParallelGroup().
-                addComponent(lblNoeudA).addComponent(lblNoeudB).addComponent(lblPoint).addComponent(lblRecto).addComponent(lblVerso));
+                addComponent(lblNoeudA).addComponent(lblNoeudB).addComponent(lblPoint).addComponent(lblRecto));
         
         hGroup.addGroup(layout.createParallelGroup().
-                addComponent(cbA).addComponent(cbB).addComponent(txtPoint).addComponent(btnRecto).addComponent(btnVerso));
+                addComponent(cbA).addComponent(cbB).addComponent(txtPoint).addComponent(btnRecto));
 
         layout.setHorizontalGroup(hGroup);
 
@@ -176,7 +146,6 @@ public class PanelAjoutObjectif extends JPanel
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(lblNoeudB).addComponent(cbB));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(lblPoint).addComponent(txtPoint));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(lblRecto).addComponent(btnRecto));
-        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(lblVerso).addComponent(btnVerso));
 
         layout.setVerticalGroup(vGroup);
 
@@ -209,7 +178,6 @@ public class PanelAjoutObjectif extends JPanel
         String nom2    = "";
         int    point   = 0;
         BufferedImage  recto   = null;
-        BufferedImage  verso   = null;
 
         //test noeud
         if(this.cbA.getSelectedIndex() == this.cbB.getSelectedIndex())
@@ -244,7 +212,6 @@ public class PanelAjoutObjectif extends JPanel
         try
         {
             recto = this.imgRecto;
-            verso = this.imgVerso;
         }
         catch(Exception e)
         {
@@ -254,7 +221,7 @@ public class PanelAjoutObjectif extends JPanel
 
         if(!erreur)
         {
-            this.ctrl.ajouterObjectif(nom1, nom2, point, recto, verso);
+            this.ctrl.ajouterObjectif(nom1, nom2, point, recto);
             this.effacerForm();
         }
     }
@@ -268,6 +235,5 @@ public class PanelAjoutObjectif extends JPanel
         this.cbB.setSelectedIndex(0);
         this.txtPoint.setText("");
         this.imgRecto = null;
-        this.imgVerso = null;
     }
 }

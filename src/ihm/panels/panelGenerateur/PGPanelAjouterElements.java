@@ -160,7 +160,6 @@ public class PGPanelAjouterElements extends JPanel
         Color titleForeColor = theme.get("titles"    ).get(0);
 		Color titleBackColor = theme.get("titles"    ).get(1);
         Color labelForeColor = theme.get("labels"    ).get(0);
-		Color labelBackColor = theme.get("labels"    ).get(1);
 
 
         this.setBackground(background);
@@ -169,8 +168,9 @@ public class PGPanelAjouterElements extends JPanel
         this.lblAjouterElements.setForeground(titleForeColor);
         this.lblAjouterElements.setBackground(titleBackColor);
 
+        this.lblNoeud.setBorder(null);
+        this.lblNoeud.setOpaque(false);
         this.lblNoeud.setForeground(labelForeColor);
-        this.lblNoeud.setBackground(labelBackColor);
         this.lblNoeud.setHorizontalAlignment(JLabel.CENTER);
 
         this.imgNoeud.setHorizontalAlignment(JLabel.CENTER);

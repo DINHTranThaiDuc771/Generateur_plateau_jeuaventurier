@@ -42,7 +42,7 @@ public class FrameCouleur extends JFrame implements ActionListener
 		/*----------------------------*/
 		/* Initialisation de la frame */
 		/*----------------------------*/
-		this.setTitle("Modifier les couleurs");
+		this.setTitle("Choix des couleurs disponibles dans la partie (arêtes et cartes wagon)");
 		this.setSize(300, nbLig * 65 + 50);
 		this.setLocation(500, 300);
 		this.setLayout(new BorderLayout());
@@ -148,13 +148,7 @@ public class FrameCouleur extends JFrame implements ActionListener
 		HashMap<String, List<Color>> theme = this.ctrl.getTheme();
 
 		Color background       = theme.get("background").get(0);
-        Color titleForeColor   = theme.get("titles"    ).get(0);
-		Color titleBackColor   = theme.get("titles"    ).get(1);
         Color labelForeColor   = theme.get("labels"    ).get(0);
-		Color labelBackColor   = theme.get("labels"    ).get(1);
-        Color saisiForeColor   = theme.get("saisies"   ).get(0);
-		Color saisiBackColor   = theme.get("saisies"   ).get(1);
-        Color placeholderColor = theme.get("saisies"   ).get(2);
         Color btnForeColor     = theme.get("bottuns"   ).get(0);
 		Color btnBackColor     = theme.get("bottuns"   ).get(1);
 
