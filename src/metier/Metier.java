@@ -82,7 +82,7 @@ public class Metier
 		this.nbJetonJoueur     = 50;
 		this.nbJetonFin        = 2;
 
-		this.lstCouleurs           = new ArrayList<Color>() {{ add(Color.RED); add(Color.BLUE); add(Color.GREEN); }};
+		this.lstCouleurs           = new ArrayList<Color>() {{ add(Color.GRAY); add(Color.RED); add(Color.BLUE); add(Color.GREEN); }};
 		this.imageVersoCouleur     = null;
 		this.imageRectoLocomotive  = null;
 		this.lstImagesRectoCouleur = new ArrayList<BufferedImage>() {{ add(null); add(null); add(null);}};
@@ -103,6 +103,10 @@ public class Metier
 		this(ctrl);
 
 		this.lireFichier(fichier);
+		System.out.println(this.lstImagesRectoCouleur.size());
+		//this.lstImagesRectoCouleur.remove(0);
+		//this.lstImagesRectoCouleur.remove(this.lstImagesRectoCouleur.size()-1);
+		//System.out.println(this.lstImagesRectoCouleur.size());
 	}
 
 	/* --------------------------- */
@@ -540,7 +544,7 @@ public class Metier
 			{
 				Element couleur = new Element("couleur");
 				lstCouleurs.addContent(couleur);
-				couleur.setAttribute("id", Integer.toString(i+1));
+				couleur.setAttribute("id", Integer.toString(i));
 				couleur.setText(this.colorToHexa(this.lstCouleurs.get(i)));
 			}
 

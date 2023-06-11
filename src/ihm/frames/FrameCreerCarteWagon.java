@@ -13,8 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import java.awt.List;
-
+import java.util.List;
 import java.awt.Image;
 
 import javax.imageio.ImageIO;
@@ -83,20 +82,15 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
 
         this.panelActionCarte = new JPanel();
 
-        try 
-        {
-            BufferedImage img = ImageIO.read(new File(".\\donnees\\images\\cartes_joueurs\\verso.png"));
-            this.ctrl.setImageVersoCouleur(img);
-            img = ImageIO.read(new File(".\\donnees\\images\\cartes_joueurs\\locomotive.png"));
-            this.ctrl.setImageRectoLocomotive(img);
-        } catch (IOException ex) {ex.printStackTrace();}
-
-        this.indiceMaxlstCouleur = this.ctrl.getCouleurs().size();
+        this.indiceMaxlstCouleur = this.ctrl.getCouleurs().size()-1;
         
         DefaultListModel model = new DefaultListModel();
-        for(Color c : this.ctrl.getCouleurs())
+		
+		List<Color> lstColor = this.ctrl.getCouleurs();
+		
+        for(int cpt = 1 ; cpt < lstColor.size() ; cpt++)
         {
-            model.addElement("Carte " + c.getRGB());
+            model.addElement("Carte " + lstColor.get(cpt).getRGB());
         }
 
         model.addElement("CoteVerso");
@@ -131,29 +125,43 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
 			{
 				if ( lstCarte.getSelectedIndex() == indiceMaxlstCouleur ) 
 				{ 
-					BufferedImage img = ctrl.getImageVersoCouleur();
-					lblCarteWagon.setIcon(new ImageIcon(img));
+					if (ctrl.getImageVersoCouleur() != null)
+					{
+						BufferedImage img = ctrl.getImageVersoCouleur();
+						lblCarteWagon.setIcon(new ImageIcon(img));
+					}
+					else
+						lblCarteWagon.setIcon(null);
+					
 					panelVisualisationCarte.setBackground(null);
 					panelCouleur.setBackground(null);
 				}
 
 				if ( lstCarte.getSelectedIndex() == indiceMaxlstCouleur+1 ) 
 				{ 
-					BufferedImage img = ctrl.getImageRectoLocomotive();
-					lblCarteWagon.setIcon(new ImageIcon(img));
+					if (ctrl.getImageRectoLocomotive() != null)
+					{
+						BufferedImage img = ctrl.getImageRectoLocomotive();
+						lblCarteWagon.setIcon(new ImageIcon(img));
+					}
+					else
+						lblCarteWagon.setIcon(null);
+					
 					panelVisualisationCarte.setBackground(null);
 					panelCouleur.setBackground(null);
 				}
 
-				if ( lstCarte.getSelectedIndex() != indiceMaxlstCouleur && lstCarte.getSelectedIndex() != indiceMaxlstCouleur+1 ) 
+				if ( lstCarte.getSelectedIndex() < indiceMaxlstCouleur ) 
 				{ 
 					if ( ctrl.getImagesRectoCouleur().get(lstCarte.getSelectedIndex()) != null )
 					{
 						BufferedImage img = ctrl.getImagesRectoCouleur().get(lstCarte.getSelectedIndex());
 						lblCarteWagon.setIcon(new ImageIcon(img));
-						panelCouleur.setBackground(ctrl.getCouleurs().get(lstCarte.getSelectedIndex()));
 					}
-					panelCouleur.setBackground(ctrl.getCouleurs().get(lstCarte.getSelectedIndex()));
+					else
+						lblCarteWagon.setIcon(null);
+
+					panelCouleur.setBackground(ctrl.getCouleurs().get(lstCarte.getSelectedIndex()+1));
 				}
 			}
 		});
@@ -197,10 +205,8 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
 
             if ( this.lstCarte.getSelectedIndex() == this.indiceMaxlstCouleur )
                 this.ctrl.setImageVersoCouleur(image);
-
             else if ( this.lstCarte.getSelectedIndex() == this.indiceMaxlstCouleur+1 )
                 this.ctrl.setImageRectoLocomotive(image);
-
             else
                 this.ctrl.setImageRectoCouleur(this.lstCarte.getSelectedIndex(), image);
         }
@@ -241,7 +247,11 @@ public class FrameCreerCarteWagon extends JFrame implements ActionListener
                         this.panelVisualisationCarte.setSize(img.getWidth(), img.getHeight());
                     }
                 } catch (IOException ex) {ex.printStackTrace();}
-                this.panelVisualisationCarte.setBackground(this.ctrl.getCouleurs().get(this.lstCarte.getSelectedIndex()));
+
+				if (this.lstCarte.getSelectedIndex() < this.indiceMaxlstCouleur)
+                	this.panelVisualisationCarte.setBackground(this.ctrl.getCouleurs().get(this.lstCarte.getSelectedIndex()+1));
+				else
+					this.panelVisualisationCarte.setBackground(null);
             }
         }
     }
